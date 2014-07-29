@@ -1,4 +1,5 @@
-﻿using Loggery;
+﻿using System.Collections;
+using Loggery;
 using UnityEngine;
 
 namespace Assets
@@ -9,7 +10,7 @@ namespace Assets
         private static readonly LoggeryLogger Logger = LoggeryManager.GetCurrentClassLogger();
         public Color Color0 = Color.red;
         public Color Color1 = Color.blue;
-        private double ping = 0;
+        private double _ping = 0;
 
         private void Start()
         {
@@ -26,9 +27,15 @@ namespace Assets
 
         public void PingMessage()
         {
-            ping++;
-            Logger.Trace("Ping set to " + ping);
-        
+            StartCoroutine("IncrementCounter");
         }
+
+        private IEnumerator IncrementCounter()
+        {
+            _ping++;
+            Logger.Trace("Ping set to " + _ping);
+            yield break;
+        }
+
     }
 }

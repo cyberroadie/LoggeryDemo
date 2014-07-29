@@ -19,14 +19,37 @@ namespace Loggery
         {
             var frame = new StackFrame(2, false);
             MethodBase method = frame.GetMethod();
-            _fullName = _path + "." + method.Name;
 
+            if (method.Name.Contains("MoveNext"))
+            {
+                string coroutineMethodName = "";
+                string fullName = frame.GetMethod().ReflectedType.Name;
+                if (fullName.Contains("<") && fullName.Contains(">"))
+                {
+                    coroutineMethodName = fullName.Substring(fullName.IndexOf('<') + 1, fullName.IndexOf('>') - 1);
+                }
+                _fullName = _path + "." + coroutineMethodName; 
+            }
+            else
+            {
+                _fullName = _path + "." + method.Name;    
+            }
+// #### START DEBUG ####
 //            var stackTrace = new StackTrace();
 //            for (int i = 1; i < stackTrace.FrameCount; i++)
 //            {
 //                frame = new StackFrame(i, false);
-//                UnityEngine.Debug.Log("<color=red>Frame method " + i + ": " + frame.GetMethod() + "</color>");
+//
+//                string coroutineMethodName;
+//                string fullName = frame.GetMethod().ReflectedType.Name;
+//                if (fullName.Contains("<") && fullName.Contains(">"))
+//                {
+//                    coroutineMethodName = fullName.Substring(fullName.IndexOf('<') + 1, fullName.IndexOf('>') - 1);
+//                    UnityEngine.Debug.Log("<color=red>Coroutine method " + i + ": " + coroutineMethodName + "</color>");
+//                }
+//                UnityEngine.Debug.Log("<color=red>Frame method " + i + ": " + frame.GetMethod() + "</color>");                
 //            }
+// #### END DEBUG ####
 
             return _fullName;
         }
